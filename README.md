@@ -36,10 +36,15 @@ $gateway->initialize($parameters);
 
 $response = $gateway->balance(array())->send();
 
-$balances = $response->getBalance();
+$isSuccessful = $response->isSuccessful();
 
-echo '<pre>';
+if ($isSuccessful)
+{
+    $balances = $response->getBalance();
 
-print_r($balances);
+    echo '<pre>';
+
+    print_r($balances);
+}
 
 ```
