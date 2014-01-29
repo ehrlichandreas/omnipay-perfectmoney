@@ -16,3 +16,30 @@ To install, simply add it to your composer.json file:
 ```
 
 and run `composer update`
+
+#### Usage
+
+```php
+
+// include the composer autoloader
+$autoloader = require __DIR__.'/vendor/autoload.php';
+
+$parameters = array
+(
+    'username'  => 'your_account_id',
+    'password'  => 'password',
+);
+
+$gateway = new \EhrlichAndreas\Omnipay\Perfectmoney\Gateway();
+
+$gateway->initialize($parameters);
+
+$response = $gateway->balance(array())->send();
+
+$balances = $response->getBalance();
+
+echo '<pre>';
+
+print_r($balances);
+
+```
