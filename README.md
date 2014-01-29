@@ -19,6 +19,8 @@ and run `composer update`
 
 #### Usage
 
+**1. Balance**
+
 ```php
 
 // include the composer autoloader
