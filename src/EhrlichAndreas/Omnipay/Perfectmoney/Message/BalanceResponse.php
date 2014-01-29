@@ -9,12 +9,11 @@ class BalanceResponse extends Response implements RedirectResponseInterface
 {
     protected $balance = array();
     
+    protected $isSuccessful = false;
+    
     public function __construct(RequestInterface $request, $response)
     {
         parent::__construct($request, $response);
-        
-        
-        $balance = array();
         
 
         $body = $response->getBody(true);
@@ -29,6 +28,8 @@ class BalanceResponse extends Response implements RedirectResponseInterface
         
         if ($matching)
         {
+            $balance = array();
+        
             foreach ($matches[1] as $key => $account)
             {
                 $value = $matches[2][$key];
@@ -70,9 +71,20 @@ class BalanceResponse extends Response implements RedirectResponseInterface
                     'balance'   => $value,
                 );
             }
-        }
         
-        $this->balance = $balance;
+            $this->balance = $balance;
+            
+            $this->isSuccessful = true;
+        }
+        else
+        {
+            $this->isSuccessful = false;
+        }
+    }
+
+    public function isSuccessful()
+    {
+        return $this->isSuccessful;
     }
     
     /**
