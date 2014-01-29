@@ -17,7 +17,6 @@ class Gateway extends AbstractGateway
         (
             'username' => '',
             'password' => '',
-            'testMode' => true,
         );
     }
 
@@ -41,24 +40,28 @@ class Gateway extends AbstractGateway
         return $this->setParameter('password', $value);
     }
 
-    public function getProjectId()
-    {
-        return $this->getParameter('projectId');
-    }
-
-    public function setProjectId($value)
-    {
-        return $this->setParameter('projectId', $value);
-    }
-
     public function authorize(array $parameters = array())
     {
-        return $this->createRequest('\EhrlichAndreas\Omnipay\Sofort\Message\AuthorizeRequest', $parameters);
+        return $this->createRequest('\EhrlichAndreas\Omnipay\Perfectmoney\Message\AuthorizeRequest', $parameters);
     }
 
     public function completeAuthorize(array $parameters = array())
     {
-        return $this->createRequest('\EhrlichAndreas\Omnipay\Sofort\Message\CompleteAuthorizeRequest', $parameters);
+        return $this->createRequest('\EhrlichAndreas\Omnipay\Perfectmoney\Message\CompleteAuthorizeRequest', $parameters);
+    }
+
+    /**
+     * 
+     * @param array $parameters
+     * @return \EhrlichAndreas\Omnipay\Perfectmoney\Message\BalanceRequest
+     */
+    public function balance(array $parameters = array())
+    {
+        $parametersTmp = $this->getParameters();
+        
+        $parameters = array_merge($parametersTmp, $parameters);
+        
+        return $this->createRequest('\EhrlichAndreas\Omnipay\Perfectmoney\Message\BalanceRequest', $parameters);
     }
 
     public function purchase(array $parameters = array())

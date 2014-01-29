@@ -1,11 +1,24 @@
 <?php
 
-namespace EhrlichAndreas\Omnipay\Sofort\Message;
+namespace EhrlichAndreas\Omnipay\Perfectmoney\Message;
 
 
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
     protected $endpoint = 'https://perfectmoney.com/acct/';
+
+    abstract public function getData();
+
+    protected function getBaseData($method)
+    {
+        $data = array
+        (
+            'AccountID'     => $this->getUsername(),
+            'PassPhrase'    => $this->getPassword(),
+        );
+
+        return $data;
+    }
 
     public function getUsername()
     {
@@ -29,10 +42,13 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function send()
     {
-        $httpResponse = $this->httpClient
-            ->post($this->getEndpoint(), null, $this->getData()->asXML())
-            ->setAuth($this->getUsername(), $this->getPassword())
-            ->send();
+        $data = $this->getData();
+        
+        $endpoint = $this->getEndpoint();
+        
+        $httpRequest = $this->httpClient->post($endpoint, null, $data);
+        
+        $httpResponse = $httpRequest->send();
 
         return $this->createResponse($httpResponse);
     }
@@ -42,5 +58,10 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     protected function getEndpoint()
     {
         return $this->endpoint;
+    }
+
+    protected function setEndpoint($endpoint)
+    {
+        $this->endpoint = $endpoint;
     }
 }
